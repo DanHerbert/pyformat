@@ -34,7 +34,8 @@ import sys
 
 import autoflake
 import autopep8
-import docformatter
+import docformatter.format as docformat
+import docformatter.configuration as docconfig
 import unify
 
 
@@ -58,7 +59,18 @@ def formatters(aggressive, apply_config, filename='',
             [filename], apply_config=apply_config)
 
     yield lambda code: autopep8.fix_code(code, options=autopep8_options)
-    yield docformatter.format_code
+
+    def doc_format_code(code):
+        with io.StringIO() as output:
+            docformat_conf = docconfig.Configurater(['', 'files'])
+            docformat_conf.do_parse_arguments()
+            formatter = docformat.Formatter(args=docformat_conf.args,
+                                            stderror=sys.stderr,
+                                            stdin=io.StringIO(code),
+                                            stdout=output)
+            formatter.do_format_standard_in(docformat_conf.parser)
+            return output.getvalue()
+    yield doc_format_code
     yield unify.format_code
 
 

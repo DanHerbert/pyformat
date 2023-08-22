@@ -40,7 +40,7 @@ with open('README.rst') as readme:
           zip_safe=False,
           install_requires=['autoflake>=0.6.6',
                             'autopep8>=1.2.2',
-                            'docformatter>=0.7',
+                            'docformatter>=1.5.0',
                             'unify>=0.2'],
           entry_points={
               'console_scripts': ['pyformat = pyformat:main']},
